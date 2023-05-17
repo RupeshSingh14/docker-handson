@@ -1,0 +1,37 @@
+version: "3.0"
+services:
+  mongo:
+    image: mongo
+    ports:
+    - "${HOST_PORT:-27017}:27017"
+    volumes:
+    - "./src/test/resources/data:/docker-entrypoint-initdb.d"
+    #profiles:
+     # - app
+  candidate-service:
+    build:
+      context: .
+      dockerfile: ./jdk/Dockerfile
+    image: candidate-service
+    depends_on:
+      - mongo
+    ports:
+    - 8112:8112
+    profiles:
+    - app
+    environment:
+      spring.data.mongodb.uri: "mongodb://candidate_user:candidate_password@mongo:27017/candidate"
+  mock-server:
+    build:
+      context: .
+      dockerfile: ./mock/Dockerfile
+    image: mock-server
+    ports:
+      - 1080:1080
+    #profiles:
+    #- app
+    environment:
+      MOCKSERVER_PROPERTY_FILE: "/config/mockserver.properties"
+      MOCKSERVER_PERSISTED_EXPECTATIONS_PATH: "/config/init.json"
+      MOCKSERVER_INITIALIZATION_JSON_PATH: "/config/init.json"
+      MOCKSERVER_PERSIST_EXPECTATIONS: "TRUE"

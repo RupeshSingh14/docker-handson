@@ -1,0 +1,14 @@
+version: "3.0"
+services:
+  postgres-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rupesh_db
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+  postrges-ui:
+    image: adminer 
+    ports:
+      - "8111:8080"

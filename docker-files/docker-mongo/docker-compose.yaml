@@ -1,0 +1,24 @@
+version: "3.0"
+services:
+  mongo-db:
+    image: mongo 
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+    -  ./persisted-data:/docker-entrypoint-initdb.d
+    #When a container is started for the first time it will execute files with extensions
+    #.sh and .js that are found in /docker-entrypoint-initdb.d
+    #./persisted-data:/data/db  #persist the mongo data which by default is stored in the container 
+    # under /data/db to the directory - ./persisted-data
+  mongo-ui:
+    image: mongo-express
+    restart: always
+    ports: 
+      - "8081:8081"
+    depends_on:                    # application name not the image name
+      - mongo-db  
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_SERVER: mongo-db

@@ -1,0 +1,7 @@
+version: "3.0"
+services:
+  web-app:
+    image: ${IMAGE:-nginx}  #creating variable to pass at run time with default value as nginx
+    # In shell, export IMAGE=ubuntu and then docker-compose up, ubuntu container will be created
+    ports:
+    - "8111:80"

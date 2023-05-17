@@ -1,0 +1,11 @@
+version: "3.0"
+services:
+  ubuntu:
+    image: ubuntu       # defining image to be ubuntu
+    command: "env"      # command to run
+    env_file:
+      - app.env         # defining a file containing the env variables, an another way of passing varibales
+    environment:        # list of environment variables and values getting passed
+      - app.name=environment-test
+      - service.url=google.com
+      - input=56

@@ -1,0 +1,11 @@
+version: "3.0"
+services:
+  web-app:
+    image: nginx
+    ports:
+    - "8111:80"
+  util:                        # to create a different container
+    image: vinsdocker/util     # using a util image 
+    depends_on:                # specifying to run the container only when dependency container is build
+    - web-app
+    command: "curl web-app"    # since both the service are in same bridge. name will resolve network

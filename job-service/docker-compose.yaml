@@ -1,0 +1,19 @@
+version: "3.0"
+services:
+  mongo-db:
+    image: mongo
+    ports:
+      - "${HOST_PORT:-27017}:27017" #If value for host_port is passed through env var then use that else use the default 27017.
+    volumes:
+      - ./src/test/resources/data:/docker-entrypoint-initdb.d
+  job-service:
+    image: job-service
+    #restart: always
+    depends_on:
+      - mongo-db
+    ports:
+      - "8112:8111"
+    profiles:
+      - app
+    #environment:
+      #spring.data.mongodb.uri: "mongodb://job_user:job_password@mongo-db:27017/job"
